@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import io
+import os
 import uuid
 from typing import Optional
 
@@ -12,9 +13,18 @@ from openpyxl.styles import PatternFill
 
 app = FastAPI(title="排班工时计算器", version="1.0.0")
 
+cors_origins = [
+    o.strip()
+    for o in os.getenv(
+        "CORS_ORIGINS",
+        "https://schedule-app-frontend-lilac.vercel.app,http://localhost:5173",
+    ).split(",")
+    if o.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=cors_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
